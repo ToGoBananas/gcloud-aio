@@ -181,7 +181,7 @@ class Table(BigqueryBase):
             'datasetId': self.dataset_name,
             'tableId': self.table_name,
         }
-        table_data = json.dumps(table).encode('utf-8')
+        table_data = orjson_dumps(table)
 
         headers = await self.headers()
 

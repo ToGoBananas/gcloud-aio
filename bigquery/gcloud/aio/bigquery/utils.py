@@ -6,9 +6,23 @@ from typing import Callable
 from typing import Dict
 from typing import List
 from typing import Optional
-
+import orjson
 
 log = logging.getLogger(__name__)
+
+
+def default_json(obj):
+    if isinstance(obj, set):
+        return tuple(obj)
+
+    if isinstance(obj, datetime):
+        return obj.isoformat()
+
+    raise TypeError
+
+
+def orjson_dumps(v, *, option=orjson.OPT_NON_STR_KEYS) -> bytes:
+    return orjson.dumps(v, option=option, default=default_json)
 
 
 try:
@@ -143,3 +157,5 @@ def query_response_to_dict(response: Dict[str, Any]) -> List[Dict[str, Any]]:
         {k['name']: parse(k, v) for k, v in zip(fields, row)}
         for row in rows
     ]
+
+

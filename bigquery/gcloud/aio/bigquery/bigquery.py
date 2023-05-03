@@ -9,7 +9,7 @@ from typing import IO
 from typing import Optional
 from typing import Tuple
 from typing import Union
-
+from .utils import orjson_dumps
 from gcloud.aio.auth import AioSession  # pylint: disable=no-name-in-module
 from gcloud.aio.auth import BUILD_GCLOUD_REST  # pylint: disable=no-name-in-module
 from gcloud.aio.auth import Token  # pylint: disable=no-name-in-module
@@ -109,7 +109,7 @@ class BigqueryBase:
             self, url: str, body: Dict[str, Any], session: Optional[Session],
             timeout: int,
     ) -> Dict[str, Any]:
-        payload = json.dumps(body).encode('utf-8')
+        payload = orjson_dumps(body)
 
         headers = await self.headers()
         headers.update({
